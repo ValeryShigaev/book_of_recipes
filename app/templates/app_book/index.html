@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Main
+{% endblock %}
+{% block content %}
+    <div class="banner">
+        <div class="filters">
+            <form method="get" action="/" class="filters__form">
+                <div class="form_row">
+                    <label for="recipe_title" class="row_label">Ввведите название:</label>
+                    <input type="text" name="name" class="f_form_input" id="recipe_title">
+                </div>
+                <div class="form_row">
+                    <label for="ingredients" class="row_label">Начните вводить ингредиент:</label>
+                    <select multiple searchenabled="true" name="ingredients" id="ingredients" placeholder="Начните вводить ингредиент">
+                        {% for ingredient in ingredients %}
+                        <option value="{{ ingredient.name }}">{{ ingredient.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="filters_button">Применить фильтр</button>
+            </form>
+        </div>
+    </div>
+    <div class="content">
+        <div class="recipes">
+        {% if queryset %}
+            {% for recipe in queryset %}
+                <div class="recipe">
+                    <div class="recipe_title">
+                        {{ recipe.title }}
+                    </div>
+                    <div class="recipe_content">
+                        {% if recipe.image %}
+                        <img class="recipe_img" src="{{ recipe.image.url }}" class="recipe_img" alt="Recipe image">
+                        {% else %}
+                        <img class="recipe_img" src="{% static 'assets/img/standart.png' %}" class="recipe_img" alt="Recipe image">
+                        {% endif %}
+                        <div class="ingredients_container">
+                            <h3 class="ingredients_title">Ингредиенты:</h3>
+                            <ul class="ingredients">
+                                {% for ingredient in recipe.ingredients.all %}
+                                    <li class="ingredient">
+                                        <span>{{ ingredient.name }}</span> 
+                                        <span>{{ingredient.grams}} гр.</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="information">
+                            <h3 class="inf_category">{{ recipe.category }}</h3>
+                            <span>Автор: {{ recipe.author }}</span>
+                        </div>
+                    </div>
+                    
+                        <button class="show_text_button">Читать рецепт</button>
+                    
+                    <div class="recipes_text hide">
+                        {{ recipe.content }}
+                    </div>
+                </div>
+            {% endfor %}
+            {% else %}
+            <div class="recipe">
+                К сожалению, нет таких рецептов!
+            </div>
+        {% endif %}
+        
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="paginate_arrow">
+                        <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 6H2.02697L7.58684 0.75L6.88365 0L6.42649e-08 6.5L6.88365 13L7.58684 12.25L2.02697 7H15V6Z" fill="black"/>
+                        </svg>
+                    </a>
+                {% endif %}
+        
+                <span class="current">
+                    {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="paginate_arrow">
+                        <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 6H12.973L7.41316 0.75L8.11635 0L15 6.5L8.11635 13L7.41316 12.25L12.973 7H0V6Z" fill="black"/>
+                        </svg>
+                    </a>
+                {% endif %}
+            </span>
+        </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'assets/scripts/multSelect.js' %}"></script>
+<script src="{% static 'assets/scripts/showContent.js' %}"></script>
+{% endblock %}
