@@ -131,6 +131,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 MEDIA_URL = '/media/'
 
+FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures')]
+
 LOGIN_REDIRECT_URL = '/'
 
 # Default primary key field type
