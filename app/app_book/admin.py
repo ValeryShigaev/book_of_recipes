@@ -12,14 +12,14 @@ class IngredientsAdmin(admin.TabularInline):
 class RecipeAdmin(admin.ModelAdmin):
     """ Recipe administrator """
 
-    list_display = ['title', 'author', 'content', 'category']
+    list_display = ['title', 'content', 'category']
     list_filter = ['category']
     search_fields = ['category__name', 'title']
     raw_id_list_displayfields = ['user']
     user_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('title', 'content', 'image', 'author', 'category')
+            'fields': ('title', 'content', 'image', 'category')
         }),
     )
     inlines = [IngredientsAdmin]
@@ -48,10 +48,10 @@ class RecipeAdmin(admin.ModelAdmin):
         """ Override to remove search by user for regular user """
 
         if 'user__username' not in self.search_fields:
-            self.search_fields.insert(self.search_fields.__len__(), 'author')
+            self.search_fields.insert(self.search_fields.__len__(), 'user')
         if not request.user.is_superuser:
             if 'user__username' in self.search_fields:
-                self.search_fields.remove('author')
+                self.search_fields.remove('user')
 
     def changelist_view(self, request, extra_context=None):
         """ Override changelist """

@@ -50,7 +50,11 @@
                         </div>
                         <div class="information">
                             <h3 class="inf_category">{{ recipe.category }}</h3>
-                            <span>Автор: {{ recipe.author }}</span>
+                            {% if recipe.user %}
+                                <span>Автор: {{ recipe.user }}</span>
+                            {% else %}
+                                <span>Автор: Oleg Igorevich</span>
+                            {% endif %}
                         </div>
                     </div>
                     
@@ -69,24 +73,40 @@
         
         <div class="pagination">
             <span class="step-links">
-                {% if page_obj.has_previous %}
+                 {% if page_obj.has_previous %}
+                    {% if 'name' in request.get_full_path or 'ingredients' in request.get_full_path %}
+                    <a href="{{ request.get_full_path }}&page={{ page_obj.previous_page_number }}" class="paginate_arrow">
+                        <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 6H2.02697L7.58684 0.75L6.88365 0L6.42649e-08 6.5L6.88365 13L7.58684 12.25L2.02697 7H15V6Z" fill="black"/>
+                        </svg>
+                    </a>
+                    {% else %}
                     <a href="?page={{ page_obj.previous_page_number }}" class="paginate_arrow">
                         <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M15 6H2.02697L7.58684 0.75L6.88365 0L6.42649e-08 6.5L6.88365 13L7.58684 12.25L2.02697 7H15V6Z" fill="black"/>
                         </svg>
                     </a>
+                    {% endif %}
                 {% endif %}
-        
+
                 <span class="current">
                     {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
                 </span>
-        
+
                 {% if page_obj.has_next %}
+                    {% if 'name' in request.get_full_path or 'ingredients' in request.get_full_path %}
+                    <a href="{{ request.get_full_path }}&page={{ page_obj.next_page_number }}" class="paginate_arrow">
+                        <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 6H12.973L7.41316 0.75L8.11635 0L15 6.5L8.11635 13L7.41316 12.25L12.973 7H0V6Z" fill="black"/>
+                        </svg>
+                    </a>
+                    {% else %}
                     <a href="?page={{ page_obj.next_page_number }}" class="paginate_arrow">
                         <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 6H12.973L7.41316 0.75L8.11635 0L15 6.5L8.11635 13L7.41316 12.25L12.973 7H0V6Z" fill="black"/>
                         </svg>
                     </a>
+                    {% endif %}
                 {% endif %}
             </span>
         </div>

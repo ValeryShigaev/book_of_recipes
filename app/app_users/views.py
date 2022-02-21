@@ -34,10 +34,14 @@ def login_view(request):
             username = auth_form.cleaned_data['username']
             password = auth_form.cleaned_data['password']
             user = authenticate(username=username, password=password)
-            login(request, user)
-            if not user:
-                auth_form.add_error('__all__', 'Not registered')
-            return redirect('main')
+            if user:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('main')
+                else:
+                    auth_form.add_error('__all__', 'Пользователь не активен')
+            else:
+                auth_form.add_error('__all__', 'Пользователь не зарегистрирован')
     else:
         auth_form = LoginForm
     context = {

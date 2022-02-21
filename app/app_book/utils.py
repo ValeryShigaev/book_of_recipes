@@ -1,7 +1,8 @@
+from typing import List
 from django.db.models import QuerySet
 from app_book.models import Recipe
 
-def generate_queryset(queryset: QuerySet[Recipe], ingredients: list[str]):
+def generate_queryset(queryset: QuerySet[Recipe], ingredients: List[str]):
     """ This function generates recipes with ingredients from the filter """
 
     for item in queryset:
